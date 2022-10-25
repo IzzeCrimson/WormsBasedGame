@@ -6,6 +6,7 @@ using UnityEngine;
 public class PlayerMovementScript : MonoBehaviour
 {
     //USED FOR MOVING
+    [Header("Movement")]
     [SerializeField] float movementSpeed;
     [SerializeField] float smoothInputSpeed;
     Vector3 playerPosition;
@@ -13,19 +14,30 @@ public class PlayerMovementScript : MonoBehaviour
     Vector2 currentInput;
     Vector2 velocity;
 
+    [Header("Jumping and Gravity")]
+    [SerializeField] float gravityValue;
+    [SerializeField] float jumpValue;
+    [SerializeField] bool isPlayerGrounded;
+
+    Rigidbody _rigidbody;
     MyInputManager myInputManager;
 
     void Awake()
     {
         myInputManager = new MyInputManager();
+        _rigidbody = GetComponent<Rigidbody>();
 
-
+        gravityValue = 1;
+        jumpValue = 10;
+        isPlayerGrounded = true;
     }
 
    
     void Update()
     {
         MoveCharacterWithKeyboard();
+        Jump();
+
     }
 
     void MoveCharacterWithKeyboard()
@@ -36,6 +48,31 @@ public class PlayerMovementScript : MonoBehaviour
         transform.position += playerPosition * movementSpeed * Time.deltaTime;
 
     }
+
+    void Jump()
+    {
+        if (myInputManager.PlayerControlls.Jump.triggered && isPlayerGrounded)
+        {
+            isPlayerGrounded = false;
+
+            _rigidbody.AddForce(Vector3.up * jumpValue, ForceMode.Impulse);
+
+        }
+
+    }
+
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            isPlayerGrounded = true;
+        }
+
+
+    }
+
+
 
     private void OnEnable()
     {

@@ -14,11 +14,11 @@ public class Weapon : MonoBehaviour
     public void Shoot()
     {
 
-        //var bullet = Instantiate(_bulletPrefab, _spawnPoint.position, Quaternion.identity);
+        var bullet = Instantiate(_bulletPrefab, _spawnPoint.position, Quaternion.identity);
 
-        //var angle = Mathf.Abs(90 - transform.localEulerAngles.x) * 1 / 90;
-        //var direction = Vector3.up * angle * Vector3.forward;
-        //bullet.AddForce(direction * _speed, ForceMode.Impulse);
+        var angle = Mathf.Abs(90 - transform.localEulerAngles.x) * 1 / 90;
+        var direction = Vector3.up * angle + Vector3.forward;
+        bullet.AddForce(direction * _speed, ForceMode.Impulse);
     }   
 
 
